@@ -8,7 +8,6 @@
 import * as os from '@/os';
 import copyToClipboard from '@/scripts/copy-to-clipboard';
 import { url } from '@/config';
-import { popout as popout_ } from '@/scripts/popout';
 import { i18n } from '@/i18n';
 import { useRouter } from '@/router';
 
@@ -33,7 +32,7 @@ const active = $computed(() => {
 	return resolved.route.name === router.currentRoute.value.name;
 });
 
-function onContextmenu(ev) {
+function onContextmenu(ev: MouseEvent) {
 	const selection = window.getSelection();
 	if (selection && selection.toString() !== '') return;
 	os.contextMenu([{
@@ -74,10 +73,6 @@ function modalWindow() {
 	os.modalPageWindow(props.to);
 }
 
-function popout() {
-	popout_(props.to);
-}
-
 function nav(ev: MouseEvent) {
 	if (props.behavior === 'browser') {
 		location.href = props.to;
@@ -85,10 +80,13 @@ function nav(ev: MouseEvent) {
 	}
 
 	if (props.behavior) {
-		if (props.behavior === 'window') {
-			return openWindow();
-		} else if (props.behavior === 'modalWindow') {
-			return modalWindow();
+		switch (props.behavior) {
+			case 'window':
+				return openWindow();
+			case 'modalWindow':
+				return modalWindow();
+			default:
+				throw new Error(`Unexpected behavior: ${props.behavior}`);
 		}
 	}
 
