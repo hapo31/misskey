@@ -14,7 +14,7 @@ const closeNotificationsByTags = async (tags: string[]) => {
 	for (const n of (await Promise.all(tags.map(tag => globalThis.registration.getNotifications({ tag })))).flat()) {
 		n.close();
 	}
-}
+};
 
 const iconUrl = (name: badgeNames) => `/static-assets/tabler-badges/${name}.png`;
 /* How to add a new badge:
@@ -182,7 +182,7 @@ async function composeNotification(data: pushNotificationDataMap[keyof pushNotif
 					}];
 				}
 
-				case 'pollEnded':
+				case 'pollEnded':{
 					const tag = `poll:${data.body.note.id}`;
 					return [t('_notification.pollEnded'), {
 						body: data.body.note.text || '',
@@ -190,6 +190,7 @@ async function composeNotification(data: pushNotificationDataMap[keyof pushNotif
 						tag,
 						data,
 					}];
+				}
 
 				case 'receiveFollowRequest':
 					return [t('_notification.youReceivedFollowRequest'), {
